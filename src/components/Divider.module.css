@@ -1,0 +1,85 @@
+.divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+  overflow: visible;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)) drop-shadow(0 0 18px rgba(200,220,255,0.4));
+  }
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--surface-mid);
+}
+
+.ornament {
+  color: var(--silver-light);
+  font-size: 0.9rem;
+}
+
+/* ── Shooting star divider ── */
+.shootingDivider {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  height: 24px;
+  overflow: visible;
+}
+
+.starShot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  animation: starShoot 2.4s linear infinite;
+  left: 0;
+}
+
+.starTail {
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.8));
+  border-radius: 2px;
+  filter: blur(1px);
+}
+
+.starGap {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.starHead {
+  font-size: 0.85rem;
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(255,255,255,1),
+    0 0 14px rgba(200,220,255,0.9),
+    0 0 28px rgba(180,200,255,0.6);
+  line-height: 1;
+}
+
+@keyframes starShoot {
+  0%   { left: -70px;  transform: translateY(0px);   opacity: 0; }
+  8%   { opacity: 1; }
+  25%  { transform: translateY(-8px); }
+  50%  { transform: translateY(-14px); }
+  75%  { transform: translateY(-8px); }
+  85%  { opacity: 1; }
+  100% { left: 100%;   transform: translateY(0px);   opacity: 0; }
+}

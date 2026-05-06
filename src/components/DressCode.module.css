@@ -1,0 +1,177 @@
+.section {
+  background: linear-gradient(160deg, #242424 0%, #1c1c1c 100%);
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.inner {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+
+.heading {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(3rem, 9vw, 4.5rem);
+  background: linear-gradient(135deg, #b0b0b0 0%, #fff 40%, #d0d0d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  padding: 0.15em 0.15em 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--surface-mid);
+}
+
+.ornament {
+  color: var(--silver-dark);
+  font-size: 0.9rem;
+}
+
+.outfits {
+  display: flex;
+  justify-content: center;
+  gap: 3.5rem;
+  margin: 0.5rem 0;
+}
+
+.outfitItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.outfitIcon {
+  width: 60px;
+  height: 100px;
+  color: var(--silver-mid);
+  filter: drop-shadow(0 0 5px rgba(200,210,255,0.4));
+}
+
+.outfitLabel {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+
+.suit {
+  animation: sway 3s ease-in-out infinite;
+  transform-origin: 24px 9px;
+}
+
+.dress {
+  animation: sway 3s ease-in-out infinite 0.5s;
+  transform-origin: 24px 9px;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%       { transform: rotate(3deg); }
+}
+
+.forbidden {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.forbiddenLabel {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-mid);
+}
+
+.forbiddenPills {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.2rem;
+  border: 1px solid #666;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cross {
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.suggestLabel {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-mid);
+}
+
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.swatchColor {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 10px rgba(255,255,255,0.08), 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.swatchName {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.62rem;
+  color: var(--text-mid);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}

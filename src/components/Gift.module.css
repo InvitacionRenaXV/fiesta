@@ -1,0 +1,116 @@
+.section {
+  background-color: var(--dark);
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.inner {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.icon {
+  width: 5rem;
+  height: 5rem;
+  color: var(--silver-mid);
+  filter: drop-shadow(0 0 6px rgba(200, 210, 255, 0.4));
+}
+
+.lid {
+  transform-origin: 24px 22px;
+  animation: lidBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes lidBounce {
+  0%             { transform: translateY(0) rotate(0deg); }
+  20%            { transform: translateY(-22px) rotate(180deg); }
+  40%, 55%, 100% { transform: translateY(0) rotate(360deg); }
+}
+
+.heading {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(3rem, 9vw, 4.5rem);
+  background: linear-gradient(135deg, #b0b0b0 0%, #fff 40%, #d0d0d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  padding: 0.15em 0.15em 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 220px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--surface-mid);
+}
+
+.ornament {
+  color: var(--silver-dark);
+  font-size: 1rem;
+}
+
+.text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  text-align: center;
+}
+
+.card {
+  width: 100%;
+  border: 1px solid var(--surface-mid);
+  background: var(--dark-mid);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.bank {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--silver-mid);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--surface-mid);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.field {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-light);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
