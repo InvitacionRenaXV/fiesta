@@ -67,7 +67,6 @@ export default function Teens() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>Solo para invitados</p>
         <h2 className={styles.heading}>Traslado</h2>
 
         <div className={styles.infoBlock}>
@@ -78,7 +77,7 @@ export default function Teens() {
               <a href={PLAZA_URL} target="_blank" rel="noopener noreferrer" className={styles.plazaLink}>
                 Plaza de Lezica
               </a>{' '}
-              a las <strong>20:00 hs.</strong>
+              a las <strong>19:45 hs.</strong>
             </p>
           </div>
           <div className={styles.infoRow}>

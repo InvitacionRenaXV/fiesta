@@ -7,19 +7,21 @@ import Playlist from './components/Playlist'
 import Teens from './components/Teens'
 import Footer from './components/Footer'
 import MusicPlayer from './components/MusicPlayer'
-
-const isTeens = new URLSearchParams(window.location.search).has('teens')
+import SuccessMessage from './components/SuccessMessage'
 
 export default function App() {
+  const isTeens = new URLSearchParams(window.location.search).has('teens')
+
   return (
     <>
-      <MusicPlayer />
+      <SuccessMessage />
+      <MusicPlayer isTeens={isTeens} />
       <Hero />
       <Countdown />
       <EventDetails isTeens={isTeens}/>
       <DressCode />
       <Gift />
-      <Playlist />
+      <Playlist isTeens={isTeens} />
       {isTeens && <Teens />}
       <Footer />
     </>

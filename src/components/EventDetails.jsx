@@ -39,7 +39,7 @@ export default function EventDetails({ isTeens }) {
             </span>
             <h3 className={styles.cardTitle}>Fecha &amp; Hora</h3>
             <p className={styles.cardMain}>Sábado 5 de Septiembre, 2026</p>
-            <p className={styles.cardSub}>21:00 hs. (puntual) a 04:00 hs.</p>
+            <p className={styles.cardSub}>20:00 hs. a 04:00 hs.</p>
           </div>
 
           {/* Location */}
@@ -73,7 +73,6 @@ export default function EventDetails({ isTeens }) {
           </p>
           <a
             href={isTeens ? "https://forms.gle/3sSgUS3pWPM83kgD7" : "https://forms.gle/YgsD2SUcfGDEaCyF6"}
-            target="_blank"
             rel="noopener noreferrer"
             className={styles.rsvpBtn}
           >

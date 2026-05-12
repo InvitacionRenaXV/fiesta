@@ -25,8 +25,11 @@ function HeartIcon() {
   )
 }
 
-export default function MusicPlayer() {
-  const [phase, setPhase] = useState('closed')
+export default function MusicPlayer({ isTeens }) {
+  const [phase, setPhase] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.has('success') ? 'open' : 'closed'
+  })
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const audioRef = useRef(null)

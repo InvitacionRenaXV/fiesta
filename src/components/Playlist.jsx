@@ -19,7 +19,7 @@ const NOTES = [
   { top: '95%', left: '75%', delay: '1.9s',  symbol: '♫', size: '1.4rem' },
 ]
 
-export default function Playlist() {
+export default function Playlist({ isTeens }) {
   return (
     <section className={styles.section}>
       <div className={styles.notesLayer} aria-hidden="true">
@@ -39,7 +39,6 @@ export default function Playlist() {
 
         <a
           href="https://forms.gle/FGjWZgrgY34vfrAa9"
-          target="_blank"
           rel="noopener noreferrer"
           className={styles.btn}
         >
