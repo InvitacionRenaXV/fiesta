@@ -8,7 +8,6 @@ import Playlist from './components/Playlist';
 import Teens from './components/Teens';
 import Footer from './components/Footer';
 import MusicPlayer from './components/MusicPlayer';
-import SuccessMessage from './components/SuccessMessage';
 
 export default function App() {
   const isTeens = new URLSearchParams(window.location.search).has('teens');
@@ -16,7 +15,6 @@ export default function App() {
 
   return (
     <>
-      <SuccessMessage />
       <MusicPlayer isTeens={isTeens} isModalOpen={isModalOpen} />
       <Hero />
       <Countdown />
