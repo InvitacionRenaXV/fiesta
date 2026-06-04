@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ModalRSVP.module.css';
 
-export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmationlOpen }) {
+export default function ModalRSVP({ isTeens, isConfirmationOpen, setIsConfirmationOpen }) {
   const [localOpen, setLocalOpen] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
     cedula: '',
@@ -18,25 +19,36 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
   const previousBodyOverflow = useRef('');
 
   const isControlled =
-    typeof isConfirmationlOpen === 'boolean' && typeof setisConfirmationlOpen === 'function';
-  const isOpen = isControlled ? isConfirmationlOpen : localOpen;
+    typeof isConfirmationOpen === 'boolean' && typeof setIsConfirmationOpen === 'function';
+  const isOpen = isControlled ? isConfirmationOpen : localOpen;
   const changeOpen = (v) => {
-    if (isControlled) setisConfirmationlOpen(v);
+    if (isControlled) setIsConfirmationOpen(v);
     else setLocalOpen(v);
   };
 
   useEffect(() => {
-    if (isOpen) {
-      previousBodyOverflow.current = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = previousBodyOverflow.current || '';
-    }
+    if (!isOpen) return;
+
+    // Empujamos un estado al historial para que el botón "Atrás" funcione
+    window.history.pushState({ modalOpen: true }, '');
+
+    const handlePopState = () => {
+      changeOpen(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    previousBodyOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     return () => {
+      window.removeEventListener('popstate', handlePopState);
+      // Si el modal se cierra por UI (X o overlay), eliminamos el estado del historial
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
       document.body.style.overflow = previousBodyOverflow.current || '';
     };
-  }, [isOpen]);
+  }, [isOpen]); // changeOpen es estable
 
   const handleChange = (e) => {
     setFormData({
@@ -45,20 +57,33 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
     });
   };
 
+  const handleFocus = (e) => {
+    // Un pequeño delay para permitir que el teclado empiece a aparecer en mobile
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setEnviando(true);
     const googleFormData = new FormData();
     googleFormData.append('entry.316980587', formData.nombre);
     googleFormData.append('entry.947593337', formData.cedula);
     googleFormData.append('entry.1733511234', formData.nombreAdulto);
     googleFormData.append('entry.198903852', formData.telefonoAdulto);
     googleFormData.append('entry.34795512', formData.asistencia);
-    const restriccionesValue =
-      formData.restricciones === 'Otro' && formData.restriccionesDetalle
-        ? `${formData.restricciones}: ${formData.restriccionesDetalle}`
-        : formData.restricciones;
-    googleFormData.append('entry.1002307023', restriccionesValue);
+
+    if (formData.restricciones === 'Otro') {
+      googleFormData.append('entry.1002307023', '__other_option__');
+      googleFormData.append(
+        'entry.1002307023.other_option_response',
+        formData.restriccionesDetalle
+      );
+    } else {
+      googleFormData.append('entry.1002307023', formData.restricciones);
+    }
+
     googleFormData.append('entry.591682182', formData.mensaje);
 
     const rsvpUrl =
@@ -71,6 +96,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
     })
       .then(() => {
         setEnviado(true);
+        setEnviando(false);
         setTimeout(() => {
           changeOpen(false);
           setEnviado(false);
@@ -88,6 +114,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
       })
       .catch((err) => {
         console.error('Error al enviar:', err);
+        setEnviando(false);
         alert('Hubo un error al registrar tu asistencia. Inténtalo de nuevo.');
       });
   };
@@ -102,12 +129,13 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
       {/* Ventana Modal */}
       {isOpen &&
         createPortal(
-          <div onClick={() => changeOpen(false)} className={styles.modalOverlay}>
+          <div onClick={() => changeOpen(false)} className={styles.modalOverlay} data-lenis-prevent>
             {/* Se utiliza la clase .confirm para dar la estructura visual de tarjeta */}
             <div
               onClick={(e) => e.stopPropagation()}
               className={styles.confirm}
               style={{ position: 'relative' }}
+              data-lenis-prevent
             >
               {/* Botón de cierre en cruz */}
               <span onClick={() => changeOpen(false)} className={styles.modalClose}>
@@ -118,18 +146,20 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                 <>
                   {/* Título elegante adaptado a tu CSS */}
                   <h3 className={styles.heading} style={{ fontSize: '3.5rem' }}>
-                    ¿Venis?
+                    ¿Venís?
                   </h3>
                   <p className={styles.cardSub}>Por favor, completa los datos para tu asistencia</p>
 
                   <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <div>
-                      <textarea
+                      <input
                         type="text"
                         name="nombre"
                         value={formData.nombre}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         placeholder="Nombre y Apellido"
+                        autoComplete="name"
                         required
                         className={styles.modalInput}
                       />
@@ -168,6 +198,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                         name="cedula"
                         value={formData.cedula}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         placeholder="Cédula"
                         required
                         className={styles.modalInput}
@@ -181,6 +212,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                             name="nombreAdulto"
                             value={formData.nombreAdulto}
                             onChange={handleChange}
+                            onFocus={handleFocus}
                             placeholder="Nombre de Madre, Padre o tutor"
                             required
                             className={styles.modalInput}
@@ -192,6 +224,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                             name="telefonoAdulto"
                             value={formData.telefonoAdulto}
                             onChange={handleChange}
+                            onFocus={handleFocus}
                             placeholder="Teléfono de Madre, Padre o tutor"
                             required
                             className={styles.modalInput}
@@ -251,6 +284,7 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                           name="restriccionesDetalle"
                           value={formData.restriccionesDetalle}
                           onChange={handleChange}
+                          onFocus={handleFocus}
                           placeholder="Especificá (ej. 'No come pescado')"
                           className={styles.modalInput}
                           rows={2}
@@ -262,13 +296,19 @@ export default function ModalRSVP({ isTeens, isConfirmationlOpen, setisConfirmat
                         name="mensaje"
                         value={formData.mensaje}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         placeholder="Mensaje especial"
                         className={styles.modalInput}
                         rows={2}
                       />
                     </div>
-                    <button type="submit" className={styles.btn} style={{ marginTop: '0.5rem' }}>
-                      Confirmar
+                    <button
+                      type="submit"
+                      className={`${styles.btn} ${enviando ? styles.btnDisabled : ''}`}
+                      style={{ marginTop: '0.5rem' }}
+                      disabled={enviando}
+                    >
+                      {enviando ? 'Enviando...' : 'Confirmar'}
                     </button>
                   </form>
                 </>

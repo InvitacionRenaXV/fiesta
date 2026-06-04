@@ -34,7 +34,8 @@ export default function Reveal({ children, excludeSparks = false }) {
   }, []);
 
   return (
-    <div ref={ref} className={`${styles.reveal} ${isVisible ? styles.visible : ''}`}>
+    /* Agregamos "visible" como string literal para que los selectores :global(.visible) funcionen */
+    <div ref={ref} className={`${styles.reveal} ${isVisible ? `${styles.visible} visible` : ''}`}>
       {!excludeSparks && (
         <div className={styles.sparksLayer} aria-hidden="true">
           {SECTION_SPARKS.map((s, i) => (

@@ -1,14 +1,38 @@
 .hero {
   position: relative;
-  min-height: 100svh;
+  height: 100dvh; /* Dynamic height para Safari iOS */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--black);
+  background: transparent;
   text-align: center;
   padding: 2rem 1.5rem;
-  overflow-x: hidden;
+  overflow: hidden;
+  /* La clave del blending: El Hero se vuelve transparente en la base, no negro */
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+}
+
+/* Fondo con imagen difuminada */
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  /* Aseguramos que la imagen también se desvanezca antes del límite */
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+.bgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, filter;
+  filter: blur(2px) brightness(0.65);
+  transform: scale(1.1);
 }
 
 /* Unificamos el resplandor decorativo con el resto de las secciones */
@@ -32,11 +56,11 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(
-    circle at 80% 20%,
-    rgba(200, 200, 240, 0.07) 0%,
-    transparent 50%
-  );
+  z-index: 1;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(200, 200, 240, 0.07) 0%, transparent 50%),
+    /* Eliminamos los gradientes que llevaban al negro puro */
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
   pointer-events: none;
 }
 
@@ -46,6 +70,9 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  /* Desvanecemos el humo antes de la unión */
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 90%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 90%);
 }
 
 .smoke1,
@@ -129,6 +156,8 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  transform: translateZ(0); /* Evita que el desenfoque del fondo afecte la nitidez de las chispas */
+  will-change: transform;
 }
 
 .spark {
@@ -178,7 +207,7 @@
 
 .content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -190,7 +219,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.5em;
+  letter-spacing: 0.4em;
   color: var(--silver);
   text-transform: uppercase;
 }
@@ -264,7 +293,6 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 300;
-  letter-spacing: 0.35em;
   color: var(--silver-mid);
 }
 

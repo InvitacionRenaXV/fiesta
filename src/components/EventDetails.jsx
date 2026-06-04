@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './EventDetails.module.css';
 import CalendarIcon from '../assets/CalendarIcon';
 import LocationIcon from '../assets/LocationIcon';
@@ -6,7 +7,7 @@ import ModalRSVP from './ModalRSVP';
 import { ShootingStarDivider } from './Divider';
 import { handleCalendar } from '../utils/handleCalendar';
 
-export default function EventDetails({ isTeens, isConfirmationlOpen, setisConfirmationlOpen }) {
+export default function EventDetails({ isTeens, isConfirmationOpen, setIsConfirmationOpen }) {
   return (
     <section id="evento" className={styles.section}>
       <div className={styles.inner}>
@@ -62,8 +63,8 @@ export default function EventDetails({ isTeens, isConfirmationlOpen, setisConfir
           </p>
           <ModalRSVP
             isTeens={isTeens}
-            isConfirmationlOpen={isConfirmationlOpen}
-            setisConfirmationlOpen={setisConfirmationlOpen}
+            isConfirmationOpen={isConfirmationOpen}
+            setIsConfirmationOpen={setIsConfirmationOpen}
           />
         </div>
       </div>

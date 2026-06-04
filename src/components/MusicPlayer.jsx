@@ -56,6 +56,16 @@ export default function MusicPlayer({ isTeens, isConfirmationlOpen }) {
 
   const handleOpen = () => {
     if (phase !== 'closed') return;
+
+    // Intentar activar Pantalla Completa para máxima inmersión
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen().catch(() => {});
+    } else if (docEl.webkitRequestFullscreen) {
+      /* Safari / iOS */
+      docEl.webkitRequestFullscreen();
+    }
+
     setPhase('opening');
     audioRef.current
       .play()
@@ -76,7 +86,7 @@ export default function MusicPlayer({ isTeens, isConfirmationlOpen }) {
   };
 
   return (
-    <div className={isHidden ? styles.hiddenContainer : ''}>
+    <div className={`${styles.mainContainer} ${isHidden ? styles.hiddenContainer : ''}`}>
       {phase !== 'open' && (
         <div
           className={`${styles.overlay} ${phase === 'opening' ? styles.overlayFading : ''}`}

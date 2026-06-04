@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import Hero from './components/Hero';
 import Countdown from './components/Countdown';
 import EventDetails from './components/EventDetails';
@@ -15,10 +16,35 @@ import appStyles from './App.module.css';
 
 export default function App() {
   const isTeens = new URLSearchParams(window.location.search).has('teens');
-  const [isConfirmationlOpen, setisConfirmationlOpen] = useState(false);
-  const [isPlaylistlOpen, setisPlaylistlOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [isPlaylistOpen, setIsPlaylistOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showPreloader, setShowPreloader] = useState(true);
+
+  useEffect(() => {
+    // Inicialización de Lenis para scroll fluido estilo lenis.dev
+    const lenis = new Lenis({
+      duration: 1.2, // Reducido para mayor respuesta al tacto
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.5, // Un poco más de sensibilidad para iPhone
+      smoothTouch: true, // Habilita explícitamente el suavizado táctil
+    });
+
+    lenis.on('scroll', ({ velocity, scroll }) => {
+      document.documentElement.style.setProperty('--scroll-velocity', velocity);
+      document.documentElement.style.setProperty('--scroll-y', scroll);
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
 
   useEffect(() => {
     const finishLoading = () => {
@@ -48,8 +74,7 @@ export default function App() {
     <>
       {showPreloader && <Preloader fadeOut={!isLoading} />}
       <div className={appStyles.noiseOverlay} aria-hidden="true" />
-      <MusicPlayer isTeens={isTeens} isConfirmationlOpen={isConfirmationlOpen} />{' '}
-      {/* El reproductor siempre visible */}
+      <MusicPlayer isTeens={isTeens} isConfirmationOpen={isConfirmationOpen || isPlaylistOpen} />
       <Hero />
       <Reveal>
         <Countdown />
@@ -57,8 +82,8 @@ export default function App() {
       <Reveal>
         <EventDetails
           isTeens={isTeens}
-          isConfirmationlOpen={isConfirmationlOpen}
-          setisConfirmationlOpen={setisConfirmationlOpen}
+          isConfirmationOpen={isConfirmationOpen}
+          setIsConfirmationOpen={setIsConfirmationOpen}
         />
       </Reveal>
       {isTeens && (
@@ -78,14 +103,14 @@ export default function App() {
       <Reveal excludeSparks={true}>
         <Playlist
           isTeens={isTeens}
-          isPlaylistlOpen={isPlaylistlOpen}
-          setisPlaylistlOpen={setisPlaylistlOpen}
+          isPlaylistOpen={isPlaylistOpen}
+          setIsPlaylistOpen={setIsPlaylistOpen}
         />
       </Reveal>
       <Reveal>
         <Footer
-          setisConfirmationlOpen={setisConfirmationlOpen}
-          setisPlaylistlOpen={setisPlaylistlOpen}
+          setIsConfirmationOpen={setIsConfirmationOpen}
+          setIsPlaylistOpen={setIsPlaylistOpen}
         />
       </Reveal>
     </>

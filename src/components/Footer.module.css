@@ -1,6 +1,6 @@
 .footer {
   background: transparent;
-  padding: 5rem 1.5rem 1rem;
+  padding: 1rem 1.5rem 1rem;
   text-align: center;
 }
 
@@ -36,20 +36,9 @@
   font-size: clamp(4rem, 13vw, 6rem);
   line-height: 1.15;
   padding: 0.15em 0.15em 0;
-  color: #e8e8e8;
-  animation: glow 3s ease-in-out infinite;
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))
-      drop-shadow(0 0 20px rgba(200, 210, 255, 0.15));
-  }
-  50% {
-    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.8))
-      drop-shadow(0 0 40px rgba(210, 220, 255, 0.4));
-  }
+  color: var(--white);
+  animation: textGlow 4s ease-in-out infinite;
+  letter-spacing: -0.02em;
 }
 
 @keyframes textGlow {
@@ -116,6 +105,7 @@
   width: 100%;
   margin-top: 2.5rem;
   padding: 0 0.5rem;
+  position: relative; /* Necesario para que las chispas se posicionen correctamente */
 }
 
 .actionBtn {
@@ -135,6 +125,21 @@
   justify-content: center;
   gap: 0.4rem;
   backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.actionBtn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(25deg);
+  transition: none;
 }
 
 .actionBtn svg {
@@ -142,14 +147,29 @@
   transition: transform 0.3s ease;
 }
 
-.actionBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: var(--white);
-  transform: translateY(-3px);
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.3),
-    0 0 15px rgba(255, 255, 255, 0.05);
+/* Solo aplicamos efectos de hover en dispositivos que tienen puntero (PC) */
+@media (hover: hover) {
+  .actionBtn:hover::after {
+    left: 150%;
+    transition: left 0.7s ease-in-out;
+  }
+
+  .actionBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--white);
+    transform: translateY(-3px);
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.3),
+      0 0 15px rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Feedback táctil optimizado para mobile (90% de tus usuarios) */
+.actionBtn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.12);
+  transition: transform 0.1s ease;
 }
 
 .actionBtn:hover svg {
@@ -158,7 +178,7 @@
 }
 
 .copy {
-  margin-top: 2rem;
+  margin-top: 3rem;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.62rem;
   color: var(--text-light);

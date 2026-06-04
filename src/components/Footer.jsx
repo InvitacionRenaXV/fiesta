@@ -70,7 +70,7 @@ const Icons = {
   ),
 };
 
-export default function Footer({ setisConfirmationlOpen, setisPlaylistlOpen }) {
+export default function Footer({ setIsConfirmationOpen, setIsPlaylistOpen }) {
   const handleMap = () => {
     window.open(
       'https://www.google.com/maps/place/Sede+C.S.+y+D.+Los+Zorzales/@-34.7761905,-56.0519258,20.46z/data=!4m14!1m7!3m6!1s0x95a028f18e20f1c7:0x8864908dfa19525!2sLos+Zorzales!8m2!3d-34.7759977!4d-56.0535621!16s%2Fg%2F11b7w6bhyy!3m5!1s0x95a0294921ff7a93:0xda5555c9e448f50b!8m2!3d-34.7762505!4d-56.051766!16s%2Fg%2F11pyk3cz5k?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D',
@@ -95,11 +95,11 @@ export default function Footer({ setisConfirmationlOpen, setisPlaylistlOpen }) {
         <p className={styles.location}>Los Zorzales, Ruta 8</p>
 
         <div className={styles.actions}>
-          <button onClick={() => setisConfirmationlOpen(true)} className={styles.actionBtn}>
+          <button onClick={() => setIsConfirmationOpen(true)} className={styles.actionBtn}>
             <Icons.Confirm />
             <span>Confirmar</span>
           </button>
-          <button onClick={() => setisPlaylistlOpen(true)} className={styles.actionBtn}>
+          <button onClick={() => setIsPlaylistOpen(true)} className={styles.actionBtn}>
             <Icons.Music />
             <span>Sugerir canción</span>
           </button>

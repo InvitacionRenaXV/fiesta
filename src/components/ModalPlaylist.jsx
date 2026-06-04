@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ModalRSVP.module.css';
 
-export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
+export default function ModalPlaylist({ isPlaylistOpen, setIsPlaylistOpen }) {
   const [localOpen, setLocalOpen] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
   const [formData, setFormData] = useState({
     nombre: '',
     cancion: '',
@@ -12,22 +13,33 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
   const previousBodyOverflow = useRef('');
 
   const isControlled =
-    typeof isPlaylistlOpen === 'boolean' && typeof setisPlaylistlOpen === 'function';
-  const isOpen = isControlled ? isPlaylistlOpen : localOpen;
+    typeof isPlaylistOpen === 'boolean' && typeof setIsPlaylistOpen === 'function';
+  const isOpen = isControlled ? isPlaylistOpen : localOpen;
   const changeOpen = (v) => {
-    if (isControlled) setisPlaylistlOpen(v);
+    if (isControlled) setIsPlaylistOpen(v);
     else setLocalOpen(v);
   };
 
   useEffect(() => {
-    if (isOpen) {
-      previousBodyOverflow.current = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = previousBodyOverflow.current || '';
-    }
+    if (!isOpen) return;
+
+    // Sincronización con el botón atrás del dispositivo
+    window.history.pushState({ modalOpen: true }, '');
+
+    const handlePopState = () => {
+      changeOpen(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    previousBodyOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     return () => {
+      window.removeEventListener('popstate', handlePopState);
+      // Limpiamos el historial si se cierra manualmente
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
       document.body.style.overflow = previousBodyOverflow.current || '';
     };
   }, [isOpen]);
@@ -39,8 +51,16 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
     });
   };
 
+  const handleFocus = (e) => {
+    // Un pequeño delay para que el scroll ocurra mientras el teclado se despliega
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setEnviando(true);
 
     const googleFormData = new FormData();
     googleFormData.append('entry.1674695982', formData.nombre);
@@ -56,6 +76,7 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
     })
       .then(() => {
         setEnviado(true);
+        setEnviando(false);
         setTimeout(() => {
           changeOpen(false);
           setEnviado(false);
@@ -67,6 +88,7 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
       })
       .catch((err) => {
         console.error('Error al enviar:', err);
+        setEnviando(false);
         alert('Hubo un error al registrar tu sugerencia. Inténtalo de nuevo.');
       });
   };
@@ -81,12 +103,13 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
       {/* Ventana Modal */}
       {isOpen &&
         createPortal(
-          <div onClick={() => changeOpen(false)} className={styles.modalOverlay}>
+          <div onClick={() => changeOpen(false)} className={styles.modalOverlay} data-lenis-prevent>
             {/* Se utiliza la clase .confirm para dar la estructura visual de tarjeta */}
             <div
               onClick={(e) => e.stopPropagation()}
               className={styles.confirm}
               style={{ position: 'relative' }}
+              data-lenis-prevent
             >
               {/* Botón de cierre en cruz */}
               <span onClick={() => changeOpen(false)} className={styles.modalClose}>
@@ -102,29 +125,36 @@ export default function ModalPlaylist({ isPlaylistlOpen, setisPlaylistlOpen }) {
 
                   <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <div>
-                      <textarea
+                      <input
                         type="text"
                         name="nombre"
                         value={formData.nombre}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         placeholder="Quien la pide?"
+                        autoComplete="name"
                         required
                         className={styles.modalInput}
                       />
                     </div>
                     <div>
                       <textarea
-                        type="text"
                         name="cancion"
                         value={formData.cancion}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                         placeholder=" Qué canción o cantante no debe faltar?"
                         required
                         className={styles.modalInput}
                       />
                     </div>
-                    <button type="submit" className={styles.btn} style={{ marginTop: '0.5rem' }}>
-                      Confirmar
+                    <button
+                      type="submit"
+                      className={`${styles.btn} ${enviando ? styles.btnDisabled : ''}`}
+                      style={{ marginTop: '0.5rem' }}
+                      disabled={enviando}
+                    >
+                      {enviando ? 'Enviando...' : 'Confirmar'}
                     </button>
                   </form>
                 </>
