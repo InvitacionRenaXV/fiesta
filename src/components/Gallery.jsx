@@ -20,13 +20,12 @@ export default function Gallery() {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <Swiper
-          modules={[Pagination, EffectFade, Autoplay]}
+          modules={[Pagination, EffectFade]}
           spaceBetween={0}
           slidesPerView={1}
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
           pagination={{
             clickable: true,
             bulletClass: styles.bullet,
