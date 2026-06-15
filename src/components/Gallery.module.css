@@ -37,6 +37,7 @@
   transition:
     box-shadow 0.4s ease,
     transform 0.4s ease;
+  backface-visibility: hidden;
 }
 
 .slide:global(.swiper-slide-active) {
