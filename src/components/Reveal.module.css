@@ -49,7 +49,14 @@
 
 .visible::before {
   opacity: 1;
-  animation: atmosphereBreathe 8s ease-in-out infinite;
+  animation: none; /* Desactivado por defecto */
+}
+
+/* Solo animamos la atmósfera en Desktop */
+@media (hover: hover) {
+  .visible::before {
+    animation: atmosphereBreathe 8s ease-in-out infinite;
+  }
 }
 
 @keyframes atmosphereBreathe {
