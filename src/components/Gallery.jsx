@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, EffectFade, Autoplay } from 'swiper/modules';
 
@@ -13,9 +14,48 @@ import img5 from '../assets/gallery/5.jpeg';
 const IMAGES = [img1, img2, img3, img5];
 
 export default function Gallery() {
+  const swiperRef = useRef(null);
+
+  const goPrev = () => swiperRef.current?.slidePrev();
+  const goNext = () => swiperRef.current?.slideNext();
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.container}>
+        <button
+          type="button"
+          className={`${styles.navBtn} ${styles.prevBtn}`}
+          aria-label="Foto anterior"
+          onClick={goPrev}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className={`${styles.navBtn} ${styles.nextBtn}`}
+          aria-label="Siguiente foto"
+          onClick={goNext}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
         <Swiper
           modules={[Pagination, EffectFade, Autoplay]}
           spaceBetween={0}
@@ -27,8 +67,11 @@ export default function Gallery() {
           autoplay={false}
           pagination={{
             clickable: true,
-            bulletClass: styles.bullet,
-            bulletActiveClass: styles.bulletActive,
+            bulletClass: 'swiper-pagination-bullet',
+            bulletActiveClass: 'swiper-pagination-bullet-active',
+          }}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
           }}
           className={styles.mySwiper}
           allowTouchMove={true}

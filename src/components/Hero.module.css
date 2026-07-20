@@ -91,6 +91,23 @@
   filter: blur(40px);
 }
 
+@media (min-width: 769px) {
+  .heroBg {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .bgImage {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center top;
+    transform: scale(1.03);
+  }
+}
+
 @media (max-width: 768px) {
   /* En móvil simplificamos el banner: menos blur/animaciones para evitar tirones */
   .smoke3,
