@@ -266,7 +266,7 @@ export default function ModalConfirmacion({
 
                     {familia && miembros && (
                       <div className={styles.radioSection}>
-                        <p className={styles.radioLabel}>Miembros de la familia:</p>
+                        <p className={styles.radioLabel}>¿Quienes vienen?</p>
                         <div className={styles.radioGroup}>
                           {miembros.map((miembro, index) => (
                             <label key={index} className={styles.radioOption}>
